@@ -1,0 +1,69 @@
+import math, numpy, cmath
+# -*- coding: utf-8 -*-
+run = 1
+while run == 1:
+ 
+    print("\n1: Air \n2: Sea Water \n3: Saturated Sand \n4: Cold Rolled Steel \n5: 2-81 Permolloy \n6: Copper \n7: Graphite \n8: Diamond \n9: Silicon \n10: Glass \n11: Wood - Kiln Dried \n12: PTFE")
+    #Table of materials associated with number
+
+    mat = input("\nPlease select the number corresponding to the material you would like to test.\n")
+    #Prompting the user to input the material number
+
+    fre = input("Please select a frequency in Hertz you would like to test.\n")
+    #Prompting the user to input frequency
+
+    import array;
+    materials = array.array('d',[1,1e-9,1,80,3,1,30,1e-4,1,1,1e7,100,1,100,1e6,1,5.96e7,1,12.5,2e5,1,7.5,1e-13,1,11.68,1.56e-3,1,65,1e-15,1,4,1e-15,1,2.1,1e-25,1])
+    #array of material's characteristics
+
+    #j = (-1)^(1/2)
+    pi = math.pi #making pi a shorter variable name
+    w= 2*pi*float(fre); #omega
+
+    Er = materials[(int(mat)*3)-3]#calculating the relative permablility from array
+    sig = materials[(int(mat)*3)-2]#calculating sigma from array
+    Ur = materials[(int(mat)*3)-1]#calculating the relative permiability from array
+
+    Eo = 8.85e-12 #permability of free space
+    Ep = Eo*Er 
+    Epp = float(sig)/float(w)
+    Uo = 4e-7*pi #permiability of free space
+    
+    if Epp/Ep < .01:
+        print("\nLow-Loss Medium")#Determins if lowloss medium
+        
+    if Epp/Ep > 100:
+            print("\nGood Conductor")#Determines if good conductor
+    
+    if .01 <= Epp/Ep <=100:
+        print("\nGeneral")#Determines if general conductor
+    
+    j = complex(0, 1)#defining imaginary component
+
+    alpha = (w)*((((Uo)*(Ep)/2)*((1+(((Epp)/(Ep))**2)**(1/2))-1))**(1/2)) #Alpha calculations
+    beta = (w)*((((Uo)*(Ep)/2)*((1+(((Epp)/(Ep))**2)**(1/2))+1))**(1/2)) #Beta Calculations
+    nc = ((Uo/Ep)**(1/2))*((1-(j*Epp/Ep))**(1/2)) #Wave Impedance calculations
+    Up = w/beta #Velocity calculations
+    Lamda = 2*pi/beta #wave length calculations
+    
+
+    print("\nAttenuation Factor -> ", "{:.3e}".format(alpha), "Np/M")
+    print("\nBeta ---------------> ", "{:.3e}".format(beta), "rad/m")
+    print("\nWave Impedance -----> ", "{:.3e}".format(nc), "Ohms")
+    print("\nVelocity -----------> ", "{:.3e}".format(Up), "m/s")
+    print("\nWave Length --------> ", "{:.3e}".format(Lamda),"m")
+     
+    loop = input("Would you like to choose another material and frequency? Please select 'y' for yes and 'n' for no!\n");
+ 
+    i=1
+    while i == 1: 
+
+        if loop == 'y':
+            i = 0
+        elif loop == 'n':
+            print("\nAttempting to exit graceful enough... Have a great day Dr. C!")
+            run = 0
+            i = 0
+        else:
+            loop = input("Incorrect input. please select 'y' or 'n'.\n")
+    
